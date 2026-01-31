@@ -1,0 +1,19 @@
+# Environment files with credentials
+.env
+.env.local
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Large zip archives (extracted folders are committed instead)
+*.zip
+
+# macOS resource forks
+__MACOSX/
