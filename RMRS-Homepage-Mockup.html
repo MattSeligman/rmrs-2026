@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMRS Homepage - Interactive Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           DESIGN TOKENS (CSS Variables)
+           ============================================ */
+        :root {
+            --rmrs-primary: #1E4B8E;
+            --rmrs-primary-dark: #0D2B5C;
+            --rmrs-secondary: #4A90D9;
+            --rmrs-accent: #E85A24;
+            --rmrs-green: #2E7D32;
+            --rmrs-beige: #F5F1EB;
+            --rmrs-white: #FFFFFF;
+            --rmrs-dark: #1A1A2E;
+            --rmrs-gray-light: #F8F9FA;
+            --rmrs-gray: #6C757D;
+            --rmrs-gray-dark: #343A40;
+
+            --rmrs-font-primary: 'Montserrat', sans-serif;
+            --rmrs-section-padding: clamp(40px, 8vw, 100px);
+            --rmrs-container-max: 1200px;
+            --rmrs-gap-sm: 16px;
+            --rmrs-gap-md: 24px;
+            --rmrs-gap-lg: 40px;
+
+            --rmrs-transition: 0.3s ease;
+            --rmrs-transition-slow: 0.5s ease;
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--rmrs-font-primary);
+            line-height: 1.6;
+            color: var(--rmrs-gray-dark);
+            background: var(--rmrs-white);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: var(--rmrs-container-max);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ============================================
+           SECTION 1: HEADER
+           ============================================ */
+        .rmrs-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--rmrs-white);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-header--scrolled {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .rmrs-header__inner {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            min-height: 80px;
+            padding: 0 20px;
+        }
+
+        .rmrs-header__logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .rmrs-header__nav {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+        }
+
+        .rmrs-nav-link {
+            font-weight: 500;
+            color: var(--rmrs-gray-dark);
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: var(--rmrs-transition);
+            cursor: pointer;
+        }
+
+        .rmrs-nav-link:hover {
+            color: var(--rmrs-primary);
+            border-bottom-color: var(--rmrs-primary);
+        }
+
+        .rmrs-nav-link.current {
+            color: var(--rmrs-primary);
+            font-weight: 600;
+        }
+
+        .rmrs-header__actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .rmrs-header__search {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--rmrs-gray);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-header__search:hover {
+            color: var(--rmrs-primary);
+            transform: scale(1.1);
+        }
+
+        .rmrs-header__hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .rmrs-header__hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--rmrs-gray-dark);
+            transition: var(--rmrs-transition);
+        }
+
+        /* ============================================
+           SECTION 2: HERO
+           ============================================ */
+        .rmrs-hero {
+            background: linear-gradient(135deg, var(--rmrs-primary) 0%, var(--rmrs-primary-dark) 100%);
+            color: var(--rmrs-white);
+            overflow: hidden;
+        }
+
+        .rmrs-hero__inner {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 60px;
+            padding: 80px 20px;
+            min-height: 600px;
+        }
+
+        .rmrs-hero__content {
+            flex: 0 0 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .rmrs-hero__title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .rmrs-hero__subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 500px;
+        }
+
+        .rmrs-depot-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .rmrs-depot-status.open::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .rmrs-btn-cta {
+            display: inline-block;
+            background: var(--rmrs-accent);
+            color: var(--rmrs-white);
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-btn-cta:hover {
+            background: #d14d1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(232,90,36,0.3);
+        }
+
+        .rmrs-btn-cta:active {
+            transform: translateY(0);
+        }
+
+        .rmrs-hero__image {
+            flex: 0 0 40%;
+            max-width: 500px;
+        }
+
+        .rmrs-hero__image img {
+            border-radius: 12px;
+            width: 100%;
+        }
+
+        /* Placeholder image styling */
+        .placeholder-img {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.875rem;
+        }
+
+        .placeholder-img--light {
+            background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+            color: #999;
+        }
+
+        /* ============================================
+           SECTION 3: SEARCH & QUICK ACTIONS
+           ============================================ */
+        .rmrs-search-section {
+            background: var(--rmrs-white);
+            padding: 40px 0;
+        }
+
+        .rmrs-search-section__inner {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rmrs-search-top {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            padding: 0 0 30px;
+        }
+
+        .rmrs-im-here-to {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rmrs-im-here-to__label {
+            font-weight: 600;
+            color: var(--rmrs-gray-dark);
+        }
+
+        .rmrs-quick-actions {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .rmrs-quick-action {
+            background: transparent;
+            border: 1px solid var(--rmrs-gray);
+            color: var(--rmrs-gray-dark);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--rmrs-transition);
+            font-family: var(--rmrs-font-primary);
+        }
+
+        .rmrs-quick-action:hover {
+            border-color: var(--rmrs-primary);
+            color: var(--rmrs-primary);
+        }
+
+        .rmrs-quick-action.active {
+            background: var(--rmrs-primary);
+            color: var(--rmrs-white);
+            border-color: var(--rmrs-primary);
+        }
+
+        .rmrs-divider {
+            height: 1px;
+            background: #E0E0E0;
+            margin: 0;
+        }
+
+        .rmrs-search-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .rmrs-search-row__title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--rmrs-gray-dark);
+        }
+
+        .rmrs-search-row__subtitle {
+            color: var(--rmrs-gray);
+            font-size: 0.875rem;
+        }
+
+        .rmrs-search-box {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            max-width: 700px;
+            margin-top: 8px;
+        }
+
+        .rmrs-search-box__input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #E0E0E0;
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+            font-size: 1rem;
+            font-family: var(--rmrs-font-primary);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-search-box__input:focus {
+            outline: none;
+            border-color: var(--rmrs-primary);
+            box-shadow: 0 0 0 3px rgba(30,75,142,0.1);
+        }
+
+        .rmrs-btn-primary {
+            background: var(--rmrs-primary);
+            color: var(--rmrs-white);
+            padding: 14px 32px;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--rmrs-font-primary);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-btn-primary:hover {
+            background: var(--rmrs-primary-dark);
+        }
+
+        .rmrs-help-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 30px 0;
+        }
+
+        .rmrs-btn-outline {
+            background: transparent;
+            border: 2px solid var(--rmrs-primary);
+            color: var(--rmrs-primary);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--rmrs-font-primary);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-btn-outline:hover {
+            background: var(--rmrs-primary);
+            color: var(--rmrs-white);
+        }
+
+        .rmrs-link--underline {
+            color: var(--rmrs-primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-link--underline:hover {
+            text-decoration-thickness: 2px;
+        }
+
+        /* ============================================
+           SECTION 4: SERVICES
+           ============================================ */
+        .rmrs-services-section {
+            background: var(--rmrs-beige);
+            padding: var(--rmrs-section-padding) 0;
+        }
+
+        .rmrs-section__header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .rmrs-section__title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--rmrs-gray-dark);
+        }
+
+        .rmrs-section__link {
+            color: var(--rmrs-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-section__link:hover {
+            color: var(--rmrs-primary-dark);
+        }
+
+        .rmrs-section__link:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .rmrs-section__link .arrow {
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-cards-grid--3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .rmrs-card {
+            background: var(--rmrs-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: var(--rmrs-transition);
+            cursor: pointer;
+        }
+
+        .rmrs-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .rmrs-card__image {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+        }
+
+        .rmrs-card__image img,
+        .rmrs-card__image .placeholder-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--rmrs-transition-slow);
+        }
+
+        .rmrs-card:hover .rmrs-card__image img,
+        .rmrs-card:hover .rmrs-card__image .placeholder-img {
+            transform: scale(1.05);
+        }
+
+        .rmrs-card__content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rmrs-card__title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--rmrs-gray-dark);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-card:hover .rmrs-card__title {
+            color: var(--rmrs-primary);
+        }
+
+        .rmrs-card__excerpt {
+            color: var(--rmrs-gray);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           SECTION 5: PROGRAMS
+           ============================================ */
+        .rmrs-programs-section {
+            background: var(--rmrs-white);
+            padding: var(--rmrs-section-padding) 0;
+        }
+
+        .rmrs-card--program {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .rmrs-card--program .rmrs-card__image {
+            position: absolute;
+            inset: 0;
+            aspect-ratio: unset;
+        }
+
+        .rmrs-card--program .rmrs-card__image img,
+        .rmrs-card--program .rmrs-card__image .placeholder-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rmrs-card__overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 60px 20px 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-card--program:hover .rmrs-card__overlay {
+            background: linear-gradient(transparent 30%, rgba(0,0,0,0.8));
+        }
+
+        .rmrs-card__title--overlay {
+            color: var(--rmrs-white);
+            font-size: 1.25rem;
+            font-weight: 600;
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-card--program:hover .rmrs-card__title--overlay {
+            transform: translateY(-4px);
+        }
+
+        /* ============================================
+           SECTION 6: STATS BAR
+           ============================================ */
+        .rmrs-stats-section {
+            background: var(--rmrs-beige);
+            padding: var(--rmrs-section-padding) 0;
+        }
+
+        .rmrs-stats-section__inner {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .rmrs-stats-content {
+            flex: 0 0 55%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .rmrs-stats-content__title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--rmrs-gray-dark);
+        }
+
+        .rmrs-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px 48px;
+        }
+
+        .rmrs-stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .rmrs-stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .rmrs-stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--rmrs-primary);
+            line-height: 1;
+        }
+
+        .rmrs-stat-suffix {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--rmrs-primary);
+        }
+
+        .rmrs-stat-label {
+            color: var(--rmrs-gray);
+            font-size: 0.875rem;
+        }
+
+        .rmrs-stats-image {
+            flex: 0 0 45%;
+            max-width: 500px;
+        }
+
+        .rmrs-stats-image img,
+        .rmrs-stats-image .placeholder-img {
+            border-radius: 12px;
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+        }
+
+        /* ============================================
+           SECTION 7: NEWS
+           ============================================ */
+        .rmrs-news-section {
+            background: var(--rmrs-white);
+            padding: var(--rmrs-section-padding) 0;
+        }
+
+        .rmrs-cards-grid--2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .rmrs-card--news {
+            border: 1px solid #E0E0E0;
+            box-shadow: none;
+        }
+
+        .rmrs-card--news:hover {
+            border-color: var(--rmrs-primary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .rmrs-card--news .rmrs-card__image {
+            aspect-ratio: 16/9;
+        }
+
+        .rmrs-card--news .rmrs-card__content {
+            padding: 24px;
+            gap: 12px;
+        }
+
+        .rmrs-card__date {
+            color: var(--rmrs-gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rmrs-btn-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--rmrs-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: var(--rmrs-font-primary);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-btn-text:hover {
+            color: var(--rmrs-primary-dark);
+        }
+
+        .rmrs-btn-text:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .rmrs-btn-text .arrow {
+            transition: var(--rmrs-transition);
+        }
+
+        /* ============================================
+           SECTION 8: FOOTER
+           ============================================ */
+        .rmrs-footer {
+            background: var(--rmrs-dark);
+            color: var(--rmrs-white);
+            padding: 60px 0 20px;
+        }
+
+        .rmrs-footer__main {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 40px;
+            padding-bottom: 40px;
+        }
+
+        .rmrs-footer__brand {
+            flex: 0 0 25%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rmrs-footer__logo {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .rmrs-footer__contact {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+            line-height: 1.8;
+        }
+
+        .rmrs-footer__nav {
+            flex: 0 0 15%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rmrs-footer__heading {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .rmrs-footer__links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rmrs-footer__link {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-footer__link:hover {
+            color: var(--rmrs-white);
+            padding-left: 4px;
+        }
+
+        .rmrs-newsletter {
+            flex: 0 0 30%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rmrs-newsletter__form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rmrs-newsletter__input {
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--rmrs-white);
+            font-size: 0.875rem;
+            font-family: var(--rmrs-font-primary);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-newsletter__input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .rmrs-newsletter__input:focus {
+            outline: none;
+            border-color: var(--rmrs-secondary);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .rmrs-newsletter__btn {
+            background: var(--rmrs-primary);
+            color: var(--rmrs-white);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--rmrs-font-primary);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-newsletter__btn:hover {
+            background: var(--rmrs-secondary);
+        }
+
+        .rmrs-social-icons {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .rmrs-social-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-social-icon:hover {
+            color: var(--rmrs-secondary);
+            transform: scale(1.1);
+        }
+
+        .rmrs-footer__divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 0;
+        }
+
+        .rmrs-footer__copyright {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .rmrs-privacy-link {
+            color: rgba(255,255,255,0.5);
+            transition: var(--rmrs-transition);
+        }
+
+        .rmrs-privacy-link:hover {
+            color: var(--rmrs-white);
+            text-decoration: underline;
+        }
+
+        /* ============================================
+           RESPONSIVE STYLES
+           ============================================ */
+        @media (max-width: 1024px) {
+            .rmrs-header__nav {
+                display: none;
+            }
+
+            .rmrs-header__hamburger {
+                display: flex;
+            }
+
+            .rmrs-hero__inner {
+                gap: 40px;
+                padding: 60px 20px;
+            }
+
+            .rmrs-hero__content {
+                flex: 0 0 55%;
+            }
+
+            .rmrs-hero__image {
+                flex: 0 0 45%;
+            }
+
+            .rmrs-cards-grid--3col {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .rmrs-stats-section__inner {
+                gap: 40px;
+            }
+
+            .rmrs-stats-content {
+                flex: 0 0 50%;
+            }
+
+            .rmrs-stats-image {
+                flex: 0 0 50%;
+            }
+
+            .rmrs-footer__main {
+                flex-wrap: wrap;
+            }
+
+            .rmrs-footer__brand {
+                flex: 0 0 45%;
+            }
+
+            .rmrs-footer__nav {
+                flex: 0 0 25%;
+            }
+
+            .rmrs-newsletter {
+                flex: 0 0 100%;
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .rmrs-hero__inner {
+                flex-direction: column;
+                text-align: center;
+                min-height: auto;
+                padding: 40px 16px;
+            }
+
+            .rmrs-hero__content {
+                flex: none;
+                width: 100%;
+                align-items: center;
+                order: 2;
+            }
+
+            .rmrs-hero__image {
+                flex: none;
+                width: 100%;
+                max-width: 300px;
+                order: 1;
+            }
+
+            .rmrs-search-top {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .rmrs-quick-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .rmrs-quick-action {
+                width: 100%;
+                text-align: center;
+            }
+
+            .rmrs-search-box {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .rmrs-search-box__input {
+                border-radius: 6px;
+                border-right: 2px solid #E0E0E0;
+            }
+
+            .rmrs-btn-primary {
+                border-radius: 6px;
+            }
+
+            .rmrs-help-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .rmrs-cards-grid--3col,
+            .rmrs-cards-grid--2col {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .rmrs-section__header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .rmrs-stats-section__inner {
+                flex-direction: column;
+            }
+
+            .rmrs-stats-content,
+            .rmrs-stats-image {
+                flex: none;
+                width: 100%;
+            }
+
+            .rmrs-stats-image {
+                max-width: 350px;
+            }
+
+            .rmrs-footer__main {
+                flex-direction: column;
+            }
+
+            .rmrs-footer__brand,
+            .rmrs-footer__nav,
+            .rmrs-newsletter {
+                flex: none;
+                width: 100%;
+            }
+
+            .rmrs-footer__nav {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .rmrs-footer__copyright {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         SECTION 1: HEADER
+         ============================================ -->
+    <header class="rmrs-header" id="header">
+        <div class="container">
+            <div class="rmrs-header__inner">
+                <div class="rmrs-header__logo">
+                    <svg width="180" height="50" viewBox="0 0 180 50">
+                        <rect width="50" height="50" rx="8" fill="#1E4B8E"/>
+                        <text x="60" y="32" font-family="Montserrat" font-weight="700" font-size="20" fill="#1E4B8E">RMRS</text>
+                    </svg>
+                </div>
+                <nav class="rmrs-header__nav">
+                    <a class="rmrs-nav-link current" href="#">At The Depot</a>
+                    <a class="rmrs-nav-link" href="#">Services</a>
+                    <a class="rmrs-nav-link" href="#">Programs</a>
+                    <a class="rmrs-nav-link" href="#">Events</a>
+                    <a class="rmrs-nav-link" href="#">Learn</a>
+                    <a class="rmrs-nav-link" href="#">News</a>
+                </nav>
+                <div class="rmrs-header__actions">
+                    <button class="rmrs-header__search" aria-label="Search">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </button>
+                    <button class="rmrs-header__hamburger" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+         SECTION 2: HERO
+         ============================================ -->
+    <section class="rmrs-hero">
+        <div class="container">
+            <div class="rmrs-hero__inner">
+                <div class="rmrs-hero__content">
+                    <h1 class="rmrs-hero__title">Recycling Starts With Knowing What Goes Where</h1>
+                    <p class="rmrs-hero__subtitle">Your local guide to reducing waste and building a sustainable community in Ridge Meadows.</p>
+                    <div class="rmrs-depot-status open">
+                        Currently Open: 8:00 AM - 5:00 PM
+                    </div>
+                    <button class="rmrs-btn-cta">Learn More</button>
+                </div>
+                <div class="rmrs-hero__image">
+                    <div class="placeholder-img" style="aspect-ratio: 4/3; border-radius: 12px;">
+                        Hero Image<br>(Person with recyclables)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECTION 3: SEARCH & QUICK ACTIONS
+         ============================================ -->
+    <section class="rmrs-search-section">
+        <div class="container">
+            <div class="rmrs-search-section__inner">
+                <div class="rmrs-search-top">
+                    <div class="rmrs-im-here-to">
+                        <span class="rmrs-im-here-to__label">I'm Here To:</span>
+                        <div class="rmrs-quick-actions">
+                            <button class="rmrs-quick-action active">Recycle</button>
+                            <button class="rmrs-quick-action">Request Pickup</button>
+                            <button class="rmrs-quick-action">Learn About Recycling</button>
+                            <button class="rmrs-quick-action">Get Involved</button>
+                        </div>
+                    </div>
+                    <div class="rmrs-depot-status open" style="background: rgba(46,125,50,0.1); color: #2E7D32;">
+                        Currently Open: 8:00 AM - 5:00 PM
+                    </div>
+                </div>
+
+                <hr class="rmrs-divider">
+
+                <div class="rmrs-search-row">
+                    <h2 class="rmrs-search-row__title">What can I Recycle?</h2>
+                    <p class="rmrs-search-row__subtitle">Visually Search The Recycling Database</p>
+                    <div class="rmrs-search-box">
+                        <input type="text" class="rmrs-search-box__input" placeholder="Search for household items (e.g., batteries, paint)">
+                        <button class="rmrs-btn-primary">SEARCH</button>
+                    </div>
+                </div>
+
+                <hr class="rmrs-divider">
+
+                <div class="rmrs-help-row">
+                    <button class="rmrs-btn-outline">Browse our Complete A-Z Guide</button>
+                    <span style="color: var(--rmrs-gray);">or</span>
+                    <span>Call the <a href="tel:6047329253" class="rmrs-link--underline">Recycling Hotline 604 732 9253</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECTION 4: SERVICES
+         ============================================ -->
+    <section class="rmrs-services-section">
+        <div class="container">
+            <div class="rmrs-section__header">
+                <h2 class="rmrs-section__title">Services</h2>
+                <a href="#" class="rmrs-section__link">View All <span class="arrow">&rarr;</span></a>
+            </div>
+            <div class="rmrs-cards-grid--3col">
+                <article class="rmrs-card rmrs-card--service">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">Large Item Pickup</div>
+                    </div>
+                    <div class="rmrs-card__content">
+                        <h3 class="rmrs-card__title">Large Item Pickup</h3>
+                        <p class="rmrs-card__excerpt">Schedule a pickup for bulky items that can't fit in your regular recycling.</p>
+                    </div>
+                </article>
+                <article class="rmrs-card rmrs-card--service">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">Found a Shopping Cart?</div>
+                    </div>
+                    <div class="rmrs-card__content">
+                        <h3 class="rmrs-card__title">Found a Shopping Cart?</h3>
+                        <p class="rmrs-card__excerpt">Report abandoned shopping carts in your neighborhood for pickup.</p>
+                    </div>
+                </article>
+                <article class="rmrs-card rmrs-card--service">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">School Workshops</div>
+                    </div>
+                    <div class="rmrs-card__content">
+                        <h3 class="rmrs-card__title">School Workshops</h3>
+                        <p class="rmrs-card__excerpt">Educational programs teaching students about recycling and sustainability.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECTION 5: PROGRAMS
+         ============================================ -->
+    <section class="rmrs-programs-section">
+        <div class="container">
+            <div class="rmrs-section__header">
+                <h2 class="rmrs-section__title">Programs</h2>
+                <a href="#" class="rmrs-section__link">View All <span class="arrow">&rarr;</span></a>
+            </div>
+            <div class="rmrs-cards-grid--3col">
+                <article class="rmrs-card rmrs-card--program">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">Employment Skills</div>
+                    </div>
+                    <div class="rmrs-card__overlay">
+                        <h3 class="rmrs-card__title--overlay">Employment Skills</h3>
+                    </div>
+                </article>
+                <article class="rmrs-card rmrs-card--program">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">PaintShare Program</div>
+                    </div>
+                    <div class="rmrs-card__overlay">
+                        <h3 class="rmrs-card__title--overlay">PaintShare Program</h3>
+                    </div>
+                </article>
+                <article class="rmrs-card rmrs-card--program">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">Hazardous Waste Events</div>
+                    </div>
+                    <div class="rmrs-card__overlay">
+                        <h3 class="rmrs-card__title--overlay">Hazardous Waste Events</h3>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECTION 6: STATS BAR
+         ============================================ -->
+    <section class="rmrs-stats-section">
+        <div class="container">
+            <div class="rmrs-stats-section__inner">
+                <div class="rmrs-stats-content">
+                    <h2 class="rmrs-stats-content__title">What We've Accomplished Together</h2>
+                    <div class="rmrs-stats-grid">
+                        <div class="rmrs-stat-item" data-target="67">
+                            <div>
+                                <span class="rmrs-stat-value">0</span><span class="rmrs-stat-suffix">%</span>
+                            </div>
+                            <span class="rmrs-stat-label">Waste Diverted Yearly</span>
+                        </div>
+                        <div class="rmrs-stat-item" data-target="42">
+                            <div>
+                                <span class="rmrs-stat-value">0</span>
+                            </div>
+                            <span class="rmrs-stat-label">Community Partners</span>
+                        </div>
+                        <div class="rmrs-stat-item" data-target="15200" data-formatted="15,200">
+                            <div>
+                                <span class="rmrs-stat-value">0</span>
+                            </div>
+                            <span class="rmrs-stat-label">Households Served</span>
+                        </div>
+                        <div class="rmrs-stat-item" data-target="89">
+                            <div>
+                                <span class="rmrs-stat-value">0</span><span class="rmrs-stat-suffix">%</span>
+                            </div>
+                            <span class="rmrs-stat-label">Community Engagement Rate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rmrs-stats-image">
+                    <div class="placeholder-img placeholder-img--light" style="aspect-ratio: 4/3; border-radius: 12px;">
+                        Stats Image<br>(Community activity)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECTION 7: NEWS
+         ============================================ -->
+    <section class="rmrs-news-section">
+        <div class="container">
+            <div class="rmrs-section__header">
+                <h2 class="rmrs-section__title">Read Our Latest News Updates</h2>
+                <a href="#" class="rmrs-section__link">View All <span class="arrow">&rarr;</span></a>
+            </div>
+            <div class="rmrs-cards-grid--2col">
+                <article class="rmrs-card rmrs-card--news">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">News Image 1</div>
+                    </div>
+                    <div class="rmrs-card__content">
+                        <span class="rmrs-card__date">Jan 5th, 2026</span>
+                        <h3 class="rmrs-card__title">New Recycling Guidelines for 2026</h3>
+                        <p class="rmrs-card__excerpt">Learn about the updated recycling guidelines that take effect this year, including new accepted materials and collection schedules.</p>
+                        <button class="rmrs-btn-text">Read Article <span class="arrow">&rarr;</span></button>
+                    </div>
+                </article>
+                <article class="rmrs-card rmrs-card--news">
+                    <div class="rmrs-card__image">
+                        <div class="placeholder-img placeholder-img--light" style="height: 100%;">News Image 2</div>
+                    </div>
+                    <div class="rmrs-card__content">
+                        <span class="rmrs-card__date">Jan 5th, 2026</span>
+                        <h3 class="rmrs-card__title">Community Clean-Up Day Success</h3>
+                        <p class="rmrs-card__excerpt">Over 200 volunteers participated in our annual community clean-up event, collecting more than 2 tons of waste from local parks.</p>
+                        <button class="rmrs-btn-text">Read Article <span class="arrow">&rarr;</span></button>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SECTION 8: FOOTER
+         ============================================ -->
+    <footer class="rmrs-footer">
+        <div class="container">
+            <div class="rmrs-footer__main">
+                <div class="rmrs-footer__brand">
+                    <svg class="rmrs-footer__logo" width="120" height="40" viewBox="0 0 180 50">
+                        <rect width="50" height="50" rx="8" fill="#FFF"/>
+                        <text x="60" y="32" font-family="Montserrat" font-weight="700" font-size="20" fill="#FFF">RMRS</text>
+                    </svg>
+                    <div class="rmrs-footer__contact">
+                        10092 - 236th Street, Maple Ridge, BC<br>
+                        Tel: 604-555-0147<br>
+                        Email: info@rmrsociety.ca
+                    </div>
+                </div>
+                <nav class="rmrs-footer__nav">
+                    <h4 class="rmrs-footer__heading">About Us</h4>
+                    <div class="rmrs-footer__links">
+                        <a href="#" class="rmrs-footer__link">Community</a>
+                        <a href="#" class="rmrs-footer__link">Contact Us</a>
+                        <a href="#" class="rmrs-footer__link">Board Login</a>
+                        <a href="#" class="rmrs-footer__link">Job Postings</a>
+                    </div>
+                </nav>
+                <nav class="rmrs-footer__nav">
+                    <h4 class="rmrs-footer__heading">At the Depot</h4>
+                    <div class="rmrs-footer__links">
+                        <a href="#" class="rmrs-footer__link">Services</a>
+                        <a href="#" class="rmrs-footer__link">Programs</a>
+                    </div>
+                </nav>
+                <nav class="rmrs-footer__nav">
+                    <h4 class="rmrs-footer__heading">Events</h4>
+                    <div class="rmrs-footer__links">
+                        <a href="#" class="rmrs-footer__link">Learn</a>
+                    </div>
+                </nav>
+                <div class="rmrs-newsletter">
+                    <h4 class="rmrs-footer__heading">Subscribe to Our Newsletter:</h4>
+                    <form class="rmrs-newsletter__form">
+                        <input type="text" class="rmrs-newsletter__input" placeholder="Fullname">
+                        <input type="email" class="rmrs-newsletter__input" placeholder="Email">
+                        <button type="submit" class="rmrs-newsletter__btn">SUBMIT</button>
+                    </form>
+                    <div class="rmrs-social-icons">
+                        <a href="#" class="rmrs-social-icon" aria-label="Facebook">f</a>
+                        <a href="#" class="rmrs-social-icon" aria-label="Twitter">X</a>
+                        <a href="#" class="rmrs-social-icon" aria-label="Instagram">in</a>
+                        <a href="#" class="rmrs-social-icon" aria-label="YouTube">YT</a>
+                    </div>
+                </div>
+            </div>
+            <hr class="rmrs-footer__divider">
+            <div class="rmrs-footer__copyright">
+                <span>Copyright &copy; 2026 Ridge Meadows Recycling Society</span>
+                <a href="#" class="rmrs-privacy-link">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         JAVASCRIPT: Interactions
+         ============================================ -->
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('rmrs-header--scrolled');
+            } else {
+                header.classList.remove('rmrs-header--scrolled');
+            }
+        });
+
+        // Quick action buttons toggle
+        const quickActions = document.querySelectorAll('.rmrs-quick-action');
+        quickActions.forEach(btn => {
+            btn.addEventListener('click', () => {
+                quickActions.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Stats counter animation
+        const statsSection = document.querySelector('.rmrs-stats-section');
+        const statItems = document.querySelectorAll('.rmrs-stat-item');
+        let animated = false;
+
+        function animateCounter(element, target, duration = 2000) {
+            const valueEl = element.querySelector('.rmrs-stat-value');
+            const formatted = element.dataset.formatted;
+            const start = 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Ease out cubic
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (target - start) * easeOut);
+
+                if (formatted) {
+                    valueEl.textContent = current.toLocaleString();
+                } else {
+                    valueEl.textContent = current;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function checkStatsVisibility() {
+            if (animated) return;
+
+            const rect = statsSection.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+
+            if (rect.top < windowHeight * 0.8) {
+                animated = true;
+                statItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                        const target = parseInt(item.dataset.target);
+                        animateCounter(item, target);
+                    }, index * 150);
+                });
+            }
+        }
+
+        window.addEventListener('scroll', checkStatsVisibility);
+        checkStatsVisibility(); // Check on load
+    </script>
+</body>
+</html>
