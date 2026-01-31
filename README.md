@@ -4,7 +4,11 @@ Design assets and documentation for the RMRS website redesign project.
 
 ## Latest Updates
 
-### January 2026
+### January 31, 2026
+- **Elementor V4 Structure Specification** - Comprehensive technical spec with flexbox configurations, CSS classes, states, and responsive breakpoints for all 8 homepage sections
+- **HTML Structure Reference** - Interactive HTML document with visual diagrams, class references, and implementation details
+
+### January 30, 2026
 - **Elementor Section Breakdown** - Detailed analysis of homepage sections with implementation guidance for Elementor v4
 - **Mobile Wireframe** - Complete mobile-first wireframe designs
 - **Brand Guidelines** - Official RMRS brand guide with colors, typography, and logo usage
@@ -13,14 +17,16 @@ Design assets and documentation for the RMRS website redesign project.
 ## Repository Contents
 
 ```
-├── README.md                           # This file
-├── RMRS-Homepage-Elementor-Breakdown.md  # Section-by-section Elementor implementation guide
-├── RMRS-WebDev-Transfer.html           # Web developer handoff documentation
-├── RMRS_Brand Guideline.pdf            # Official brand guidelines
-├── doc-images/                         # Design reference images
-│   ├── homepage-design-1.jpg           # Desktop homepage design
-│   └── mobile-wireframe-1.jpg          # Mobile wireframe
-├── Mobile Wireframe/                   # Mobile wireframe assets
+├── README.md                              # This file
+├── RMRS-Elementor-V4-Structure.md         # Technical spec: flexbox, classes, states
+├── RMRS-Elementor-V4-Structure.html       # Interactive HTML reference
+├── RMRS-Homepage-Elementor-Breakdown.md   # Section-by-section implementation guide
+├── RMRS-WebDev-Transfer.html              # Web developer handoff documentation
+├── RMRS_Brand Guideline.pdf               # Official brand guidelines
+├── doc-images/                            # Design reference images
+│   ├── homepage-design-1.jpg              # Desktop homepage design
+│   └── mobile-wireframe-1.jpg             # Mobile wireframe
+├── Mobile Wireframe/                      # Mobile wireframe assets
 └── RMRS_Website_HOMEPAGE_DESIGN_WebDev_Transfer_Folder/
     └── [Design transfer assets]
 ```
@@ -29,7 +35,9 @@ Design assets and documentation for the RMRS website redesign project.
 
 | Document | Description |
 |----------|-------------|
-| [Elementor Breakdown](RMRS-Homepage-Elementor-Breakdown.md) | Section-by-section guide for implementing the homepage in Elementor |
+| [Elementor V4 Structure (HTML)](RMRS-Elementor-V4-Structure.html) | Interactive reference with flexbox diagrams, CSS classes, states |
+| [Elementor V4 Structure (MD)](RMRS-Elementor-V4-Structure.md) | Technical specification in markdown format |
+| [Elementor Breakdown](RMRS-Homepage-Elementor-Breakdown.md) | Section-by-section guide for implementing the homepage |
 | [WebDev Transfer](RMRS-WebDev-Transfer.html) | Complete developer handoff with technical specs |
 | [Brand Guidelines](RMRS_Brand%20Guideline.pdf) | Official colors, typography, and logo usage |
 

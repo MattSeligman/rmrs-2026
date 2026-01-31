@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMRS Homepage - Elementor V4 Structure Specification</title>
+    <style>
+        :root {
+            --rmrs-primary: #1E4B8E;
+            --rmrs-primary-dark: #0D2B5C;
+            --rmrs-secondary: #4A90D9;
+            --rmrs-accent: #E85A24;
+            --rmrs-green: #2E7D32;
+            --rmrs-beige: #F5F1EB;
+            --rmrs-dark: #1A1A2E;
+            --rmrs-gray: #6C757D;
+            --rmrs-gray-light: #F8F9FA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--rmrs-primary), var(--rmrs-primary-dark));
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .toc {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .toc h2 {
+            color: var(--rmrs-primary);
+            margin-bottom: 16px;
+            font-size: 1.25rem;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .toc a {
+            color: var(--rmrs-primary);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: var(--rmrs-gray-light);
+            display: block;
+            transition: all 0.2s;
+        }
+
+        .toc a:hover {
+            background: var(--rmrs-primary);
+            color: white;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-number {
+            width: 40px;
+            height: 40px;
+            background: var(--rmrs-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--rmrs-primary-dark);
+        }
+
+        .section-content {
+            padding: 24px;
+        }
+
+        .subsection {
+            margin-bottom: 24px;
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .subsection h3 {
+            color: var(--rmrs-primary);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--rmrs-beige);
+        }
+
+        .subsection h4 {
+            color: var(--rmrs-gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 16px 0 8px;
+        }
+
+        .structure-tree {
+            background: #1a1a2e;
+            color: #a8d4a8;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--rmrs-gray-light);
+            font-weight: 600;
+            color: var(--rmrs-primary-dark);
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .class-tag {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .class-tag.custom {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .class-tag.local {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .state-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .state-badge.hover {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .state-badge.active {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .state-badge.focus {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        code {
+            background: var(--rmrs-gray-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .code-block {
+            background: #263238;
+            color: #aed581;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .flex-diagram {
+            display: flex;
+            gap: 8px;
+            padding: 16px;
+            background: var(--rmrs-gray-light);
+            border-radius: 8px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .flex-item {
+            padding: 12px 16px;
+            background: white;
+            border: 2px dashed var(--rmrs-primary);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .flex-item.container {
+            border-style: solid;
+            background: #e3f2fd;
+        }
+
+        .responsive-table {
+            overflow-x: auto;
+        }
+
+        .breakpoint-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .breakpoint-card {
+            background: var(--rmrs-gray-light);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .breakpoint-card h5 {
+            color: var(--rmrs-primary);
+            margin-bottom: 8px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding: 16px;
+            background: var(--rmrs-gray-light);
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .color-swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .breakpoint-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>RMRS Homepage - Elementor V4 Structure Specification</h1>
+            <p>Detailed technical specification for implementing the RMRS homepage in Elementor v4</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2>Table of Contents</h2>
+            <div class="toc-grid">
+                <a href="#global">Global Settings</a>
+                <a href="#section-1">Section 1: Header</a>
+                <a href="#section-2">Section 2: Hero</a>
+                <a href="#section-3">Section 3: Search & Quick Actions</a>
+                <a href="#section-4">Section 4: Services</a>
+                <a href="#section-5">Section 5: Programs</a>
+                <a href="#section-6">Section 6: Stats Bar</a>
+                <a href="#section-7">Section 7: News</a>
+                <a href="#section-8">Section 8: Footer</a>
+                <a href="#class-reference">Class Reference</a>
+            </div>
+        </nav>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <span class="class-tag custom">.class</span>
+                <span>Custom CSS Class</span>
+            </div>
+            <div class="legend-item">
+                <span class="class-tag local">Local</span>
+                <span>Elementor Local Styling</span>
+            </div>
+            <div class="legend-item">
+                <span class="state-badge hover">:hover</span>
+                <span>Hover State</span>
+            </div>
+            <div class="legend-item">
+                <span class="state-badge active">:active</span>
+                <span>Active State</span>
+            </div>
+            <div class="legend-item">
+                <span class="state-badge focus">:focus</span>
+                <span>Focus State</span>
+            </div>
+        </div>
+
+        <!-- Global Settings -->
+        <section class="section" id="global">
+            <div class="section-header">
+                <div class="section-number">0</div>
+                <h2 class="section-title">Global Settings</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Design Tokens (CSS Variables)</h3>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #1E4B8E;"></div>
+                            <span>--rmrs-primary: #1E4B8E</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #0D2B5C;"></div>
+                            <span>--rmrs-primary-dark: #0D2B5C</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #4A90D9;"></div>
+                            <span>--rmrs-secondary: #4A90D9</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #E85A24;"></div>
+                            <span>--rmrs-accent: #E85A24</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #2E7D32;"></div>
+                            <span>--rmrs-green: #2E7D32</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #F5F1EB;"></div>
+                            <span>--rmrs-beige: #F5F1EB</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-swatch" style="background: #1A1A2E;"></div>
+                            <span>--rmrs-dark: #1A1A2E</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Breakpoints</h3>
+                    <div class="breakpoint-row">
+                        <div class="breakpoint-card">
+                            <h5>Desktop</h5>
+                            <code>&gt; 1024px</code>
+                        </div>
+                        <div class="breakpoint-card">
+                            <h5>Tablet</h5>
+                            <code>768px - 1024px</code>
+                        </div>
+                        <div class="breakpoint-card">
+                            <h5>Mobile</h5>
+                            <code>&lt; 768px</code>
+                        </div>
+                        <div class="breakpoint-card">
+                            <h5>Mobile Small</h5>
+                            <code>&lt; 480px</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Header -->
+        <section class="section" id="section-1">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">Header</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Header] .rmrs-header
+└── [CONTAINER: Header Inner] flex-row
+    ├── [CONTAINER: Logo]
+    │   └── [IMAGE: Logo]
+    ├── [CONTAINER: Nav] flex-row
+    │   └── [NAV MENU WIDGET]
+    └── [CONTAINER: Actions] flex-row
+        ├── [BUTTON: Search Icon]
+        └── [BUTTON: Hamburger] (mobile only)</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Flexbox Configuration</h3>
+                    <div class="flex-diagram">
+                        <div class="flex-item container">Header Inner<br><small>flex-row | space-between | center</small></div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row</td>
+                            <td>Row</td>
+                        </tr>
+                        <tr>
+                            <td>Justify Content</td>
+                            <td>Space Between</td>
+                            <td>Space Between</td>
+                            <td>Space Between</td>
+                        </tr>
+                        <tr>
+                            <td>Align Items</td>
+                            <td>Center</td>
+                            <td>Center</td>
+                            <td>Center</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>40px</td>
+                            <td>24px</td>
+                            <td>16px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>CSS Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Class</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-header</span></td>
+                            <td>Custom</td>
+                            <td>Header wrapper styling</td>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-header--sticky</span></td>
+                            <td>Custom</td>
+                            <td>Sticky position state</td>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-header--scrolled</span></td>
+                            <td>Custom (JS)</td>
+                            <td>After scroll shadow/bg</td>
+                        </tr>
+                        <tr>
+                            <td>Nav Link</td>
+                            <td><span class="class-tag custom">.rmrs-nav-link</span></td>
+                            <td>Custom</td>
+                            <td>Navigation menu items</td>
+                        </tr>
+                        <tr>
+                            <td>Nav Link</td>
+                            <td><span class="class-tag custom">.rmrs-nav-link--dropdown</span></td>
+                            <td>Custom</td>
+                            <td>Dropdown parent items</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>Header</td>
+                            <td><span class="state-badge active">.scrolled</span></td>
+                            <td><code>background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Nav Link</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>color: var(--rmrs-primary); border-bottom: 2px solid var(--rmrs-primary);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Nav Link</td>
+                            <td><span class="state-badge active">.current</span></td>
+                            <td><code>color: var(--rmrs-primary); font-weight: 600;</code></td>
+                        </tr>
+                        <tr>
+                            <td>Search Icon</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>color: var(--rmrs-primary); transform: scale(1.1);</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <p>None in this section.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Hero -->
+        <section class="section" id="section-2">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">Hero</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Hero] .rmrs-hero .rmrs-section--primary
+└── [CONTAINER: Hero Inner] flex-row → stack on mobile
+    ├── [CONTAINER: Content] 60%
+    │   ├── [HEADING: H1] .rmrs-hero__title
+    │   ├── [TEXT: Subheading] .rmrs-hero__subtitle
+    │   ├── [CONTAINER: Depot Status]
+    │   │   └── [DEPOT STATUS WIDGET]
+    │   └── [BUTTON: CTA] .rmrs-btn-cta
+    └── [CONTAINER: Image] 40%
+        └── [IMAGE: Hero Image]</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Background</h3>
+                    <div class="code-block">background: linear-gradient(135deg, var(--rmrs-primary) 0%, var(--rmrs-primary-dark) 100%);</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Flexbox Configuration</h3>
+                    <div class="flex-diagram">
+                        <div class="flex-item container" style="flex: 0.6;">Content (60%)<br><small>flex-column | flex-start</small></div>
+                        <div class="flex-item container" style="flex: 0.4;">Image (40%)<br><small>centered</small></div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row</td>
+                            <td><strong>Column</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Content Width</td>
+                            <td>60%</td>
+                            <td>55%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Image Width</td>
+                            <td>40%</td>
+                            <td>45%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>60px</td>
+                            <td>40px</td>
+                            <td>32px</td>
+                        </tr>
+                        <tr>
+                            <td>Text Align</td>
+                            <td>Left</td>
+                            <td>Left</td>
+                            <td><strong>Center</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Image Order</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td><strong>1 (first)</strong></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>CSS Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Class</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-hero</span></td>
+                            <td>Custom</td>
+                            <td>Hero section wrapper</td>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-section--primary</span></td>
+                            <td>Custom</td>
+                            <td>Blue gradient background</td>
+                        </tr>
+                        <tr>
+                            <td>Heading</td>
+                            <td><span class="class-tag custom">.rmrs-hero__title</span></td>
+                            <td>Custom</td>
+                            <td>H1 white text, large</td>
+                        </tr>
+                        <tr>
+                            <td>Text</td>
+                            <td><span class="class-tag custom">.rmrs-hero__subtitle</span></td>
+                            <td>Custom</td>
+                            <td>Subheading styling</td>
+                        </tr>
+                        <tr>
+                            <td>Widget</td>
+                            <td><span class="class-tag custom">.rmrs-depot-status</span></td>
+                            <td>Custom</td>
+                            <td>Depot status badge</td>
+                        </tr>
+                        <tr>
+                            <td>Button</td>
+                            <td><span class="class-tag custom">.rmrs-btn-cta</span></td>
+                            <td>Custom</td>
+                            <td>Primary CTA button (orange)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>CTA Button</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>background: var(--rmrs-accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,90,36,0.3);</code></td>
+                        </tr>
+                        <tr>
+                            <td>CTA Button</td>
+                            <td><span class="state-badge active">:active</span></td>
+                            <td><code>transform: translateY(0);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Depot Status</td>
+                            <td><span class="state-badge active">.open</span></td>
+                            <td><code>background: var(--rmrs-green);</code> with green dot indicator</td>
+                        </tr>
+                        <tr>
+                            <td>Depot Status</td>
+                            <td><span class="state-badge active">.closed</span></td>
+                            <td><code>background: var(--rmrs-gray);</code> with red dot indicator</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <p>None in this section.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Search & Quick Actions -->
+        <section class="section" id="section-3">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">Search & Quick Actions</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Search Section] .rmrs-search-section .rmrs-section--white
+└── [CONTAINER: Search Inner] flex-column
+    ├── [CONTAINER: Top Row] flex-row → wrap on mobile
+    │   ├── [CONTAINER: I'm Here To]
+    │   │   ├── [TEXT: Label]
+    │   │   └── [CONTAINER: Buttons] flex-row .rmrs-quick-actions
+    │   │       ├── [BUTTON: Recycle] .rmrs-quick-action
+    │   │       ├── [BUTTON: Request Pickup]
+    │   │       ├── [BUTTON: Learn About Recycling]
+    │   │       └── [BUTTON: Get Involved]
+    │   └── [CONTAINER: Depot Status]
+    │       └── [DEPOT STATUS WIDGET]
+    ├── [DIVIDER: Horizontal Line] ─────────────────────
+    ├── [CONTAINER: Search Row] flex-column
+    │   ├── [TEXT: "What can I Recycle?"]
+    │   ├── [TEXT: Subtitle]
+    │   └── [CONTAINER: Search Box] flex-row .rmrs-search-box
+    │       ├── [RECYCLING SEARCH WIDGET]
+    │       └── [BUTTON: Search] .rmrs-btn-primary
+    ├── [DIVIDER: Horizontal Line] ─────────────────────
+    └── [CONTAINER: Help Row] flex-row → stack on mobile
+        ├── [BUTTON: Browse Complete A-Z Guide] .rmrs-btn-outline
+        ├── [TEXT: "or"]
+        └── [TEXT + LINK: Call Recycling Hotline]</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Flexbox Configuration</h3>
+
+                    <h4>Top Row Container</h4>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row</td>
+                            <td><strong>Column</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Justify</td>
+                            <td>Space Between</td>
+                            <td>Space Between</td>
+                            <td>Center</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>40px</td>
+                            <td>24px</td>
+                            <td>20px</td>
+                        </tr>
+                    </table>
+
+                    <h4>Quick Action Buttons</h4>
+                    <div class="flex-diagram">
+                        <div class="flex-item">Recycle</div>
+                        <div class="flex-item">Request Pickup</div>
+                        <div class="flex-item">Learn About Recycling</div>
+                        <div class="flex-item">Get Involved</div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row (wrap)</td>
+                            <td><strong>Column</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>12px</td>
+                            <td>10px</td>
+                            <td>8px</td>
+                        </tr>
+                    </table>
+
+                    <h4>Search Box</h4>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row</td>
+                            <td><strong>Column</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Max Width</td>
+                            <td>700px</td>
+                            <td>600px</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>0 (attached)</td>
+                            <td>0</td>
+                            <td>12px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>CSS Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Class</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-search-section</span></td>
+                            <td>Custom</td>
+                            <td>Section wrapper</td>
+                        </tr>
+                        <tr>
+                            <td>Container</td>
+                            <td><span class="class-tag custom">.rmrs-quick-actions</span></td>
+                            <td>Custom</td>
+                            <td>Button group container</td>
+                        </tr>
+                        <tr>
+                            <td>Button</td>
+                            <td><span class="class-tag custom">.rmrs-quick-action</span></td>
+                            <td>Custom</td>
+                            <td>Individual action button</td>
+                        </tr>
+                        <tr>
+                            <td>Container</td>
+                            <td><span class="class-tag custom">.rmrs-search-box</span></td>
+                            <td>Custom</td>
+                            <td>Search input wrapper</td>
+                        </tr>
+                        <tr>
+                            <td>Input</td>
+                            <td><span class="class-tag custom">.rmrs-search-box__input</span></td>
+                            <td>Custom</td>
+                            <td>Search input field</td>
+                        </tr>
+                        <tr>
+                            <td>Button</td>
+                            <td><span class="class-tag custom">.rmrs-btn-primary</span></td>
+                            <td>Custom</td>
+                            <td>Primary filled button</td>
+                        </tr>
+                        <tr>
+                            <td>Button</td>
+                            <td><span class="class-tag custom">.rmrs-btn-outline</span></td>
+                            <td>Custom</td>
+                            <td>Outline button style</td>
+                        </tr>
+                        <tr>
+                            <td>Link</td>
+                            <td><span class="class-tag custom">.rmrs-link--underline</span></td>
+                            <td>Custom</td>
+                            <td>Underlined text link</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>Quick Action</td>
+                            <td>default</td>
+                            <td><code>background: transparent; border: 1px solid var(--rmrs-gray); color: var(--rmrs-gray-dark);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Quick Action</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>border-color: var(--rmrs-primary); color: var(--rmrs-primary);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Quick Action</td>
+                            <td><span class="state-badge active">.active</span></td>
+                            <td><code>background: var(--rmrs-primary); color: white; border-color: var(--rmrs-primary);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Search Input</td>
+                            <td><span class="state-badge focus">:focus</span></td>
+                            <td><code>border-color: var(--rmrs-primary); box-shadow: 0 0 0 3px rgba(30,75,142,0.1);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Search Button</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>background: var(--rmrs-primary-dark);</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <table>
+                        <tr>
+                            <th>Position</th>
+                            <th>Style</th>
+                            <th>Implementation</th>
+                        </tr>
+                        <tr>
+                            <td>After Top Row</td>
+                            <td>1px solid #E0E0E0</td>
+                            <td>Elementor Divider Widget</td>
+                        </tr>
+                        <tr>
+                            <td>After Search Row</td>
+                            <td>1px solid #E0E0E0</td>
+                            <td>Elementor Divider Widget</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Services -->
+        <section class="section" id="section-4">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2 class="section-title">Services</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Services] .rmrs-services-section .rmrs-section--beige
+└── [CONTAINER: Services Inner] flex-column
+    ├── [CONTAINER: Header] flex-row .rmrs-section__header
+    │   ├── [HEADING: "Services"] .rmrs-section__title
+    │   └── [LINK: View All →] .rmrs-section__link
+    └── [CONTAINER: Cards Grid] grid 3-col .rmrs-cards-grid--3col
+        ├── [CONTAINER: Card 1] .rmrs-card .rmrs-card--service
+        │   ├── [CONTAINER: Image] .rmrs-card__image
+        │   │   └── [IMAGE] .rmrs-card__img
+        │   └── [CONTAINER: Content] .rmrs-card__content
+        │       ├── [HEADING: Title] .rmrs-card__title
+        │       └── [TEXT: Excerpt] .rmrs-card__excerpt
+        ├── [CONTAINER: Card 2]
+        └── [CONTAINER: Card 3]</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Grid Configuration</h3>
+                    <div class="flex-diagram">
+                        <div class="flex-item container" style="flex: 1;">Card 1</div>
+                        <div class="flex-item container" style="flex: 1;">Card 2</div>
+                        <div class="flex-item container" style="flex: 1;">Card 3</div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Display</td>
+                            <td>Grid</td>
+                            <td>Grid</td>
+                            <td>Grid</td>
+                        </tr>
+                        <tr>
+                            <td>Columns</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td><strong>1</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>30px</td>
+                            <td>24px</td>
+                            <td>20px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Card Structure</h3>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Column</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Background</td>
+                            <td>White</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Border Radius</td>
+                            <td>12px</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Box Shadow</td>
+                            <td>0 2px 8px rgba(0,0,0,0.08)</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Image Aspect Ratio</td>
+                            <td>16/10</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Content Padding</td>
+                            <td>20px</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>CSS Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Class</th>
+                            <th>Type</th>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-section--beige</span></td>
+                            <td>Custom</td>
+                        </tr>
+                        <tr>
+                            <td>Header</td>
+                            <td><span class="class-tag custom">.rmrs-section__header</span></td>
+                            <td>Custom</td>
+                        </tr>
+                        <tr>
+                            <td>Grid</td>
+                            <td><span class="class-tag custom">.rmrs-cards-grid--3col</span></td>
+                            <td>Custom</td>
+                        </tr>
+                        <tr>
+                            <td>Card</td>
+                            <td><span class="class-tag custom">.rmrs-card</span></td>
+                            <td>Custom</td>
+                        </tr>
+                        <tr>
+                            <td>Card</td>
+                            <td><span class="class-tag custom">.rmrs-card--service</span></td>
+                            <td>Custom</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States & Animations</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>Card</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-4px);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Card Image</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>transform: scale(1.05);</code> (transition: 0.5s)</td>
+                        </tr>
+                        <tr>
+                            <td>Card Title</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>color: var(--rmrs-primary);</code></td>
+                        </tr>
+                        <tr>
+                            <td>View All Link</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td>Arrow moves right 4px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <p>None in this section.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Programs -->
+        <section class="section" id="section-5">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2 class="section-title">Programs</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Programs] .rmrs-programs-section .rmrs-section--white
+└── [CONTAINER: Programs Inner] flex-column
+    ├── [CONTAINER: Header] flex-row
+    │   ├── [HEADING: "Programs"]
+    │   └── [LINK: View All →]
+    └── [CONTAINER: Cards Grid] grid 3-col
+        ├── [CONTAINER: Card 1] .rmrs-card--program (position: relative)
+        │   ├── [IMAGE: Program Image] (full card, aspect 4/3)
+        │   └── [CONTAINER: Overlay] .rmrs-card__overlay (absolute, bottom)
+        │       └── [HEADING: Title] .rmrs-card__title--overlay
+        ├── [CONTAINER: Card 2]
+        └── [CONTAINER: Card 3]</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Card Overlay Structure</h3>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                        </tr>
+                        <tr>
+                            <td>Position</td>
+                            <td>Absolute</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Bottom/Left/Right</td>
+                            <td>0</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Padding</td>
+                            <td>20px</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Background</td>
+                            <td>linear-gradient(transparent, rgba(0,0,0,0.7))</td>
+                            <td><span class="class-tag custom">.rmrs-card__overlay</span></td>
+                        </tr>
+                        <tr>
+                            <td>Card Aspect Ratio</td>
+                            <td>4/3</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>Card</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>transform: scale(1.02);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Card Image</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>transform: scale(1.1);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Overlay</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>background: linear-gradient(transparent 30%, rgba(0,0,0,0.8));</code></td>
+                        </tr>
+                        <tr>
+                            <td>Title</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>transform: translateY(-4px);</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <p>None in this section.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Stats Bar -->
+        <section class="section" id="section-6">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <h2 class="section-title">Stats Bar</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Stats] .rmrs-stats-section .rmrs-section--beige
+└── [CONTAINER: Stats Inner] flex-row → stack on mobile
+    ├── [CONTAINER: Content] 55%
+    │   ├── [HEADING: "What We've Accomplished Together"]
+    │   └── [CONTAINER: Stats Grid] grid 2x2 .rmrs-stats-grid
+    │       ├── [CONTAINER: Stat 1] .rmrs-stat-item
+    │       │   ├── [TEXT: "67"] .rmrs-stat-value
+    │       │   ├── [TEXT: "%"] .rmrs-stat-suffix
+    │       │   └── [TEXT: "Waste Diverted Yearly"] .rmrs-stat-label
+    │       ├── [CONTAINER: Stat 2] 42 Community Partners
+    │       ├── [CONTAINER: Stat 3] 15,200 Households Served
+    │       └── [CONTAINER: Stat 4] 89% Community Engagement Rate
+    └── [CONTAINER: Image] 45%
+        └── [IMAGE: Stats Image]</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Flexbox Configuration</h3>
+                    <div class="flex-diagram">
+                        <div class="flex-item container" style="flex: 0.55;">Content (55%)<br><small>2x2 grid inside</small></div>
+                        <div class="flex-item container" style="flex: 0.45;">Image (45%)</div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row</td>
+                            <td><strong>Column</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Content Width</td>
+                            <td>55%</td>
+                            <td>50%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Image Width</td>
+                            <td>45%</td>
+                            <td>50%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>60px</td>
+                            <td>40px</td>
+                            <td>32px</td>
+                        </tr>
+                    </table>
+
+                    <h4>Stats Grid (2x2)</h4>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Display</td>
+                            <td>Grid</td>
+                            <td>Grid</td>
+                            <td>Grid</td>
+                        </tr>
+                        <tr>
+                            <td>Columns</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>32px 48px</td>
+                            <td>24px 32px</td>
+                            <td>20px 24px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Stats Data</h3>
+                    <table>
+                        <tr>
+                            <th>Value</th>
+                            <th>Suffix</th>
+                            <th>Label</th>
+                        </tr>
+                        <tr>
+                            <td>67</td>
+                            <td>%</td>
+                            <td>Waste Diverted Yearly</td>
+                        </tr>
+                        <tr>
+                            <td>42</td>
+                            <td>-</td>
+                            <td>Community Partners</td>
+                        </tr>
+                        <tr>
+                            <td>15,200</td>
+                            <td>-</td>
+                            <td>Households Served</td>
+                        </tr>
+                        <tr>
+                            <td>89</td>
+                            <td>%</td>
+                            <td>Community Engagement Rate</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Counter Animation</h3>
+                    <div class="code-block">// Stats Bar Widget Settings
+{
+  duration: 2000,
+  easing: 'easeOutCubic',
+  separator: ',',
+  decimal: '.',
+  startOnViewport: true,
+  viewportOffset: 0.8
+}</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>States & Animations</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Trigger</th>
+                            <th>Animation</th>
+                        </tr>
+                        <tr>
+                            <td>Stat Value</td>
+                            <td>In Viewport</td>
+                            <td>Counter animation: 0 → target value</td>
+                        </tr>
+                        <tr>
+                            <td>Stat Item</td>
+                            <td>In Viewport</td>
+                            <td><code>opacity: 0 → 1; transform: translateY(20px) → translateY(0);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Image</td>
+                            <td>In Viewport</td>
+                            <td>Fade in with slight scale</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <p>None in this section.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: News -->
+        <section class="section" id="section-7">
+            <div class="section-header">
+                <div class="section-number">7</div>
+                <h2 class="section-title">News</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: News] .rmrs-news-section .rmrs-section--white
+└── [CONTAINER: News Inner] flex-column
+    ├── [CONTAINER: Header] flex-row
+    │   ├── [HEADING: "Read Our Latest News Updates"]
+    │   └── [LINK: View All →]
+    ├── [CONTAINER: Cards Grid] grid 2-col .rmrs-cards-grid--2col
+    │   ├── [CONTAINER: Card 1] .rmrs-card--news
+    │   │   ├── [CONTAINER: Image] .rmrs-card__image
+    │   │   │   └── [IMAGE: Featured Image]
+    │   │   └── [CONTAINER: Content] .rmrs-card__content
+    │   │       ├── [TEXT: Date] .rmrs-card__date
+    │   │       ├── [HEADING: Title] .rmrs-card__title
+    │   │       ├── [TEXT: Excerpt] .rmrs-card__excerpt
+    │   │       └── [BUTTON: Read Article →] .rmrs-btn-text
+    │   └── [CONTAINER: Card 2]
+    └── [CONTAINER: Footer] (mobile only)
+        └── [BUTTON: View All News] .rmrs-btn-secondary</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Grid Configuration</h3>
+                    <div class="flex-diagram">
+                        <div class="flex-item container" style="flex: 1;">News Card 1</div>
+                        <div class="flex-item container" style="flex: 1;">News Card 2</div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Display</td>
+                            <td>Grid</td>
+                            <td>Grid</td>
+                            <td><strong>Flex (column)</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Columns</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>30px</td>
+                            <td>24px</td>
+                            <td>20px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Card Structure</h3>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Column</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Border</td>
+                            <td>1px solid #E0E0E0</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Border Radius</td>
+                            <td>12px</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Image Aspect Ratio</td>
+                            <td>16/9</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Content Padding</td>
+                            <td>24px</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                        <tr>
+                            <td>Content Gap</td>
+                            <td>12px</td>
+                            <td><span class="class-tag local">Local</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>CSS Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Class</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>Grid</td>
+                            <td><span class="class-tag custom">.rmrs-cards-grid--2col</span></td>
+                            <td>2 column grid layout</td>
+                        </tr>
+                        <tr>
+                            <td>Card</td>
+                            <td><span class="class-tag custom">.rmrs-card--news</span></td>
+                            <td>News card variant</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td><span class="class-tag custom">.rmrs-card__date</span></td>
+                            <td>Date meta styling (gray, small)</td>
+                        </tr>
+                        <tr>
+                            <td>Button</td>
+                            <td><span class="class-tag custom">.rmrs-btn-text</span></td>
+                            <td>Text button with arrow</td>
+                        </tr>
+                        <tr>
+                            <td>Button</td>
+                            <td><span class="class-tag custom">.rmrs-btn-secondary</span></td>
+                            <td>Secondary button (mobile CTA)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>Card</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>border-color: var(--rmrs-primary); box-shadow: 0 4px 16px rgba(0,0,0,0.1);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Card Image</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>transform: scale(1.05);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Card Title</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>color: var(--rmrs-primary);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Read Article</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td>Arrow moves right 4px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <p>None in this section.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Footer -->
+        <section class="section" id="section-8">
+            <div class="section-header">
+                <div class="section-number">8</div>
+                <h2 class="section-title">Footer</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Structure Tree</h3>
+                    <div class="structure-tree">[SECTION: Footer] .rmrs-footer .rmrs-section--dark
+└── [CONTAINER: Footer Inner] flex-column
+    ├── [CONTAINER: Main Footer] flex-row → stack on mobile
+    │   ├── [CONTAINER: Brand Column] 25% .rmrs-footer__brand
+    │   │   ├── [IMAGE: Logo] .rmrs-footer__logo
+    │   │   ├── [TEXT: Address]
+    │   │   ├── [TEXT: Phone]
+    │   │   └── [TEXT: Email]
+    │   ├── [CONTAINER: Nav Column 1] 15% .rmrs-footer__nav
+    │   │   ├── [HEADING: "About Us"] .rmrs-footer__heading
+    │   │   └── [NAV: Links] .rmrs-footer__links
+    │   ├── [CONTAINER: Nav Column 2] 15%
+    │   │   ├── [HEADING: "At the Depot"]
+    │   │   └── [NAV: Links]
+    │   ├── [CONTAINER: Nav Column 3] 15%
+    │   │   ├── [HEADING: "Events"]
+    │   │   └── [NAV: Links]
+    │   └── [CONTAINER: Newsletter] 30% .rmrs-newsletter
+    │       ├── [HEADING: "Subscribe to Our Newsletter"]
+    │       ├── [FORM: Newsletter]
+    │       │   ├── [INPUT: Name] .rmrs-newsletter__input
+    │       │   ├── [INPUT: Email] .rmrs-newsletter__input
+    │       │   └── [BUTTON: Submit] .rmrs-newsletter__btn
+    │       └── [CONTAINER: Social Icons] .rmrs-social-icons
+    ├── [DIVIDER: Horizontal Line] ─────────────────────
+    └── [CONTAINER: Copyright Row] flex-row .rmrs-footer__copyright
+        ├── [TEXT: Copyright]
+        └── [LINK: Privacy Policy]</div>
+                </div>
+
+                <div class="subsection">
+                    <h3>Flexbox Configuration</h3>
+
+                    <h4>Main Footer Container</h4>
+                    <div class="flex-diagram">
+                        <div class="flex-item container" style="flex: 0.25;">Brand<br>25%</div>
+                        <div class="flex-item" style="flex: 0.15;">Nav 1<br>15%</div>
+                        <div class="flex-item" style="flex: 0.15;">Nav 2<br>15%</div>
+                        <div class="flex-item" style="flex: 0.15;">Nav 3<br>15%</div>
+                        <div class="flex-item container" style="flex: 0.30;">Newsletter<br>30%</div>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Direction</td>
+                            <td>Row</td>
+                            <td>Row (wrap)</td>
+                            <td><strong>Column</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Justify</td>
+                            <td>Space Between</td>
+                            <td>Space Between</td>
+                            <td>Flex Start</td>
+                        </tr>
+                        <tr>
+                            <td>Gap</td>
+                            <td>40px</td>
+                            <td>30px</td>
+                            <td>32px</td>
+                        </tr>
+                    </table>
+
+                    <h4>Column Widths (Responsive)</h4>
+                    <table>
+                        <tr>
+                            <th>Column</th>
+                            <th>Desktop</th>
+                            <th>Tablet</th>
+                            <th>Mobile</th>
+                        </tr>
+                        <tr>
+                            <td>Brand</td>
+                            <td>25%</td>
+                            <td>45%</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Nav Columns</td>
+                            <td>15% each</td>
+                            <td>25% each</td>
+                            <td>50% (2-col grid)</td>
+                        </tr>
+                        <tr>
+                            <td>Newsletter</td>
+                            <td>30%</td>
+                            <td>100%</td>
+                            <td>100%</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>CSS Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>Class</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-footer</span></td>
+                            <td>Footer wrapper</td>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td><span class="class-tag custom">.rmrs-section--dark</span></td>
+                            <td>Dark blue background</td>
+                        </tr>
+                        <tr>
+                            <td>Brand</td>
+                            <td><span class="class-tag custom">.rmrs-footer__brand</span></td>
+                            <td>Brand column styling</td>
+                        </tr>
+                        <tr>
+                            <td>Nav</td>
+                            <td><span class="class-tag custom">.rmrs-footer__nav</span></td>
+                            <td>Navigation column</td>
+                        </tr>
+                        <tr>
+                            <td>Link</td>
+                            <td><span class="class-tag custom">.rmrs-footer__link</span></td>
+                            <td>Footer nav links (white/70%)</td>
+                        </tr>
+                        <tr>
+                            <td>Newsletter</td>
+                            <td><span class="class-tag custom">.rmrs-newsletter</span></td>
+                            <td>Newsletter form container</td>
+                        </tr>
+                        <tr>
+                            <td>Input</td>
+                            <td><span class="class-tag custom">.rmrs-newsletter__input</span></td>
+                            <td>Form input styling</td>
+                        </tr>
+                        <tr>
+                            <td>Icons</td>
+                            <td><span class="class-tag custom">.rmrs-social-icons</span></td>
+                            <td>Social icon container</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>States</h3>
+                    <table>
+                        <tr>
+                            <th>Element</th>
+                            <th>State</th>
+                            <th>CSS Changes</th>
+                        </tr>
+                        <tr>
+                            <td>Footer Link</td>
+                            <td>default</td>
+                            <td><code>color: rgba(255,255,255,0.7);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Footer Link</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>color: white; padding-left: 4px;</code></td>
+                        </tr>
+                        <tr>
+                            <td>Newsletter Input</td>
+                            <td><span class="state-badge focus">:focus</span></td>
+                            <td><code>border-color: var(--rmrs-secondary); background: rgba(255,255,255,0.1);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Newsletter Button</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>background: var(--rmrs-secondary);</code></td>
+                        </tr>
+                        <tr>
+                            <td>Social Icon</td>
+                            <td><span class="state-badge hover">:hover</span></td>
+                            <td><code>color: var(--rmrs-secondary); transform: scale(1.1);</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Dividers</h3>
+                    <table>
+                        <tr>
+                            <th>Position</th>
+                            <th>Style</th>
+                            <th>Implementation</th>
+                        </tr>
+                        <tr>
+                            <td>Before Copyright</td>
+                            <td>1px solid rgba(255,255,255,0.1)</td>
+                            <td>Elementor Divider Widget</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Class Reference -->
+        <section class="section" id="class-reference">
+            <div class="section-header">
+                <div class="section-number">R</div>
+                <h2 class="section-title">CSS Class Reference Summary</h2>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3>Section Background Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Class</th>
+                            <th>Background</th>
+                            <th>Used In</th>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-section--primary</span></td>
+                            <td>Blue gradient</td>
+                            <td>Hero</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-section--white</span></td>
+                            <td>#FFFFFF</td>
+                            <td>Search, Programs, News</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-section--beige</span></td>
+                            <td>#F5F1EB</td>
+                            <td>Services, Stats</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-section--dark</span></td>
+                            <td>#1A1A2E</td>
+                            <td>Footer</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Card Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Class</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card</span></td>
+                            <td>Base card styles (bg, radius, shadow)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card--service</span></td>
+                            <td>Service card with image + content</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card--program</span></td>
+                            <td>Program card with overlay</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card--news</span></td>
+                            <td>News card with date meta</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card__image</span></td>
+                            <td>Image container (overflow hidden)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card__content</span></td>
+                            <td>Content area with padding</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card__overlay</span></td>
+                            <td>Gradient overlay for programs</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card__title</span></td>
+                            <td>Card heading</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card__excerpt</span></td>
+                            <td>Card description text</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-card__date</span></td>
+                            <td>Date meta (news)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Button Classes</h3>
+                    <table>
+                        <tr>
+                            <th>Class</th>
+                            <th>Style</th>
+                            <th>Used In</th>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-btn-primary</span></td>
+                            <td>Filled blue button</td>
+                            <td>Search</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-btn-secondary</span></td>
+                            <td>Gray/outlined button</td>
+                            <td>News (mobile)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-btn-outline</span></td>
+                            <td>Border-only button</td>
+                            <td>Search (A-Z Guide)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-btn-cta</span></td>
+                            <td>Orange CTA button</td>
+                            <td>Hero</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-btn-text</span></td>
+                            <td>Text link with arrow</td>
+                            <td>News cards</td>
+                        </tr>
+                        <tr>
+                            <td><span class="class-tag custom">.rmrs-quick-action</span></td>
+                            <td>Quick action toggle button</td>
+                            <td>Search section</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>Local vs Custom Class Decision Guide</h3>
+                    <table>
+                        <tr>
+                            <th>Use Custom CSS Class When:</th>
+                            <th>Use Elementor Local Styling When:</th>
+                        </tr>
+                        <tr>
+                            <td>Style is reused across multiple elements</td>
+                            <td>One-off spacing adjustments</td>
+                        </tr>
+                        <tr>
+                            <td>Style defines a component (cards, buttons)</td>
+                            <td>Element-specific sizing</td>
+                        </tr>
+                        <tr>
+                            <td>Style needs to be consistent site-wide</td>
+                            <td>Unique positioning for single element</td>
+                        </tr>
+                        <tr>
+                            <td>Style involves complex hover/state changes</td>
+                            <td>Quick responsive overrides</td>
+                        </tr>
+                        <tr>
+                            <td>Style uses CSS variables</td>
+                            <td>Elementor motion effects</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer style="background: var(--rmrs-dark); color: white; padding: 20px; text-align: center; margin-top: 40px;">
+        <p>RMRS Homepage Elementor V4 Structure Specification - January 2026</p>
+    </footer>
+</body>
+</html>
